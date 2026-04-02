@@ -3,6 +3,7 @@ import cors from "cors";
 import { waitForDb } from "./db.js";
 import authRoutes from "./routes/auth.js";
 import notesRoutes from "./routes/notes.js";
+import tokensRoutes from "./routes/tokens.js";
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -10,6 +11,7 @@ app.use(express.json());
 app.get("/health", (_, res) => res.json({ ok: true }));
 app.use("/api/auth",  authRoutes);
 app.use("/api/notes", notesRoutes);
+app.use("/api/tokens", tokensRoutes);
 
 waitForDb()
   .then(() => app.listen(process.env.PORT || 4001, () =>

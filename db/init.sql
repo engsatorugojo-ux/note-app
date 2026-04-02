@@ -28,3 +28,13 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER notes_updated_at
 BEFORE UPDATE ON notes
 FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+CREATE TABLE IF NOT EXISTS api_tokens (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  token_hash VARCHAR(255) NOT NULL UNIQUE,
+  prefix VARCHAR(30) NOT NULL,
+  last_used_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);

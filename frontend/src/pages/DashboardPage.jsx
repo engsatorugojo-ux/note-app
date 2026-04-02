@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { notesApi } from "../api/client.js";
+import TokensModal from "../components/TokensModal.jsx";
 import NoteCard from "../components/NoteCard.jsx";
 import NoteEditor from "../components/NoteEditor.jsx";
 
@@ -8,7 +9,8 @@ export default function DashboardPage({ user, onLogout }) {
   const [loading, setLoading] = useState(false);
   const [query,   setQuery]   = useState("");
   const [sort,    setSort]    = useState("updated"); // "updated" | "created"
-  const [editor,  setEditor]  = useState(null); // null | { note } | "new"
+  const [editor,     setEditor]     = useState(null);
+  const [showTokens, setShowTokens] = useState(false);
   const searchRef = useRef(null);
   const debounceRef = useRef(null);
 
@@ -97,6 +99,7 @@ export default function DashboardPage({ user, onLogout }) {
           {/* User */}
           <div className="flex items-center gap-3 shrink-0">
             <span className="text-sm font-medium text-gray-600 hidden lg:block">{user.name}</span>
+            <button onClick={() => setShowTokens(true)} title="API Tokens" className="btn-outline text-sm py-1.5 px-3">🔑</button>
             <button onClick={onLogout} className="btn-outline text-sm py-1.5 px-3">Out</button>
           </div>
         </div>
@@ -149,6 +152,7 @@ export default function DashboardPage({ user, onLogout }) {
         )}
       </main>
 
+      {showTokens && <TokensModal onClose={() => setShowTokens(false)} />}
       {/* Editor */}
       {editor === "new" && (
         <NoteEditor onClose={() => setEditor(null)} onSaved={handleSaved} onDeleted={handleDeleted} />
